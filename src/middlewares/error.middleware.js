@@ -10,4 +10,20 @@
  */
 export function errorHandler(err, req, res, next) {
   // Your code here
+  if(err.name === "ValidationError"){
+    const message = Object.values(err.errors).map((e)=>e.message).join(",");   //Yaha Mistake thi
+    return res.status(400).json({
+       error:{
+         message:message,
+       }
+    })
+  }else if(err.name === "CastError"){
+    return res.status(400).json({
+      message:"Invalid id format"
+    })
+  }else{
+    return res.status(err.status ?? 500).json({
+      message:err.message,
+    })
+  }
 }
